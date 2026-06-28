@@ -4,7 +4,6 @@ import { mockQuestions } from '../data';
 import { api, getStoredUser } from '../services/api';
 
 const difficulties = ['All', 'Easy', 'Medium', 'Hard'];
-const topics = ['All', 'React', 'Node.js', 'MongoDB', 'Auth', 'DSA', 'Introduction', 'Behavioral', 'Motivation'];
 
 export default function Questions() {
   const [openId, setOpenId] = useState(null);
@@ -51,8 +50,14 @@ export default function Questions() {
       }));
     }
 
-    return [...mockQuestions.mern, ...mockQuestions.hr];
+    const role = getStoredUser()?.role || 'mern';
+    return [...(mockQuestions[role] || []), ...mockQuestions.hr];
   }, [serverQuestions]);
+
+  const availableTopics = useMemo(() => {
+    const set = new Set(allQuestions.map((q) => q.topic));
+    return ['All', ...Array.from(set)];
+  }, [allQuestions]);
 
   const filtered = allQuestions.filter((q) =>
     (diffFilter === 'All' || q.difficulty === diffFilter) &&
@@ -97,7 +102,7 @@ export default function Questions() {
           ))}
         </div>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-          {topics.map((topic) => (
+          {availableTopics.map((topic) => (
             <button
               key={topic}
               onClick={() => setTopicFilter(topic)}
