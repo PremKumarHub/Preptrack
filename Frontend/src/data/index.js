@@ -14,6 +14,9 @@ export const companies = [
   { id: 'wipro', name: 'Wipro', logo: 'Wipro', pattern: 'NLTH Pattern', rounds: ['Online', 'Essay', 'TR', 'HR'], color: '#341D50' },
   { id: 'freshworks', name: 'Freshworks', logo: 'FW', pattern: 'Product-focused DSA', rounds: ['DSA', 'System Design', 'Culture Fit'], color: '#29B35E' },
   { id: 'cognizant', name: 'Cognizant', logo: 'CTS', pattern: 'GenC Track', rounds: ['Aptitude', 'Coding', 'TR', 'HR'], color: '#1264A3' },
+  { id: 'amazon', name: 'Amazon', logo: 'AMZ', pattern: 'SDE Rounds', rounds: ['OA', 'DSA 1', 'DSA 2', 'Bar Raiser'], color: '#FF9900' },
+  { id: 'accenture', name: 'Accenture', logo: 'ACC', pattern: 'ASE/SDE Track', rounds: ['Cognitive', 'Technical', 'HR'], color: '#A100FF' },
+  { id: 'hcl', name: 'HCL', logo: 'HCL', pattern: 'First Career', rounds: ['Online Test', 'Technical', 'HR'], color: '#005697' },
 ];
 
 export const mockQuestions = {

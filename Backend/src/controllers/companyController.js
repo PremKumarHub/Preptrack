@@ -7,6 +7,9 @@ const COMPANIES = [
   { id: 'wipro', name: 'Wipro', logo: 'Wipro', pattern: 'NLTH Pattern', rounds: ['Online', 'Essay', 'TR', 'HR'], color: '#341D50', focus: 'Communication, essay writing, and core CS fundamentals.' },
   { id: 'freshworks', name: 'Freshworks', logo: 'FW', pattern: 'Product-focused DSA', rounds: ['DSA', 'System Design', 'Culture Fit'], color: '#29B35E', focus: 'Product mindset, clean code, and scalable thinking.' },
   { id: 'cognizant', name: 'Cognizant', logo: 'CTS', pattern: 'GenC Track', rounds: ['Aptitude', 'Coding', 'TR', 'HR'], color: '#1264A3', focus: 'Aptitude, basic programming, and role-fit behavioral questions.' },
+  { id: 'amazon', name: 'Amazon', logo: 'AMZ', pattern: 'SDE Rounds', rounds: ['OA', 'DSA 1', 'DSA 2', 'Bar Raiser'], color: '#FF9900', focus: 'Leadership Principles and heavy DSA/System Design.' },
+  { id: 'accenture', name: 'Accenture', logo: 'ACC', pattern: 'ASE/SDE Track', rounds: ['Cognitive', 'Technical', 'HR'], color: '#A100FF', focus: 'Cognitive ability, basic coding, and professional communication.' },
+  { id: 'hcl', name: 'HCL', logo: 'HCL', pattern: 'First Career', rounds: ['Online Test', 'Technical', 'HR'], color: '#005697', focus: 'Domain knowledge and technical fundamentals.' },
 ];
 
 export async function listCompanies(_req, res) {
