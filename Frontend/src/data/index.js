@@ -36,6 +36,22 @@ export const mockQuestions = {
     { id: 'h4', q: 'What is your greatest strength and weakness?', topic: 'Self-Awareness', difficulty: 'Medium', hint: 'Be genuine. For weakness, show what you are doing to improve.' },
     { id: 'h5', q: 'Describe a challenging project and how you handled it.', topic: 'Behavioral', difficulty: 'Medium', hint: 'Use STAR: Situation, Task, Action, Result.' },
   ],
+  java: [
+    { id: 'j1', q: 'Explain platform independence in Java.', topic: 'Core Java', difficulty: 'Easy', hint: 'JVM and Bytecode.' },
+    { id: 'j2', q: 'ArrayList vs LinkedList.', topic: 'Collections', difficulty: 'Medium', hint: 'Search vs Modify.' },
+  ],
+  python: [
+    { id: 'p1', q: 'List vs Tuple in Python.', topic: 'Basics', difficulty: 'Easy', hint: 'Mutability.' },
+    { id: 'p2', q: 'What is a Decorator?', topic: 'Advanced', difficulty: 'Medium', hint: 'Extend behavior.' },
+  ],
+  frontend: [
+    { id: 'f1', q: 'Explain CSS Box Model.', topic: 'CSS', difficulty: 'Easy', hint: 'Margin, Border, Padding, Content.' },
+    { id: 'f2', q: 'What is a Closure?', topic: 'JavaScript', difficulty: 'Medium', hint: 'Parent scope access.' },
+  ],
+  data: [
+    { id: 'd1', q: 'INNER vs LEFT JOIN in SQL.', topic: 'SQL', difficulty: 'Easy', hint: 'Matching vs All Left.' },
+    { id: 'd2', q: 'What is a P-value?', topic: 'Statistics', difficulty: 'Medium', hint: 'Hypothesis testing.' },
+  ],
 };
 
 export const topicsByRole = {
@@ -49,5 +65,26 @@ export const topicsByRole = {
     { name: 'DSA in JavaScript', questions: 30, done: 0, difficulty: 'Hard' },
     { name: 'System Design Basics', questions: 8, done: 0, difficulty: 'Hard' },
     { name: 'HR & Behavioral', questions: 20, done: 0, difficulty: 'Easy' },
+  ],
+  java: [
+    { name: 'Java Fundamentals', questions: 25, done: 0, difficulty: 'Easy' },
+    { name: 'OOPS & Collections', questions: 20, done: 0, difficulty: 'Medium' },
+    { name: 'Spring Boot Basics', questions: 15, done: 0, difficulty: 'Hard' },
+    { name: 'SQL & Hibernate', questions: 12, done: 0, difficulty: 'Medium' },
+  ],
+  python: [
+    { name: 'Python Basics', questions: 20, done: 0, difficulty: 'Easy' },
+    { name: 'Data Structures in Python', questions: 18, done: 0, difficulty: 'Medium' },
+    { name: 'Django/Flask Framework', questions: 15, done: 0, difficulty: 'Hard' },
+  ],
+  frontend: [
+    { name: 'HTML & Semantic UI', questions: 15, done: 0, difficulty: 'Easy' },
+    { name: 'Advanced CSS & Styling', questions: 20, done: 0, difficulty: 'Medium' },
+    { name: 'React/Vue Logic', questions: 25, done: 0, difficulty: 'Hard' },
+  ],
+  data: [
+    { name: 'SQL for Analytics', questions: 20, done: 0, difficulty: 'Medium' },
+    { name: 'Statistics & Math', questions: 15, done: 0, difficulty: 'Medium' },
+    { name: 'Python for Data (Pandas)', questions: 18, done: 0, difficulty: 'Hard' },
   ],
 };
