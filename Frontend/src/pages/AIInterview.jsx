@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { AlertCircle, Bot, CheckCircle2, Clock, RotateCcw, Save, Send, User } from 'lucide-react';
 import { mockQuestions } from '../data';
 import { api, getStoredUser, getToken } from '../services/api';
 
 const rounds = [
   { id: 'technical', label: 'Technical', icon: 'TR' },
+  { id: 'dsa', label: 'Coding / DSA', icon: 'DSA' },
+  { id: 'aptitude', label: 'Aptitude', icon: 'APT' },
   { id: 'hr', label: 'HR Round', icon: 'HR' },
   { id: 'project', label: 'Project Explanation', icon: 'PR' },
 ];
@@ -44,24 +46,60 @@ export default function AIInterview() {
   const timerRef = useRef(null);
 
   useEffect(() => {
-    if (!user?.role) return;
-    const role = selectedRound === 'hr' ? 'hr' : user.role;
-    api.questions(role).then((data) => {
+    api.questions(selectedRole).then((data) => {
       if (data.questions?.length) setBackendQuestions(data.questions);
     }).catch(() => {});
-  }, [user?.role, selectedRound]);
+  }, [selectedRole]);
 
-  const questions = (() => {
-    if (backendQuestions.length) {
-      return backendQuestions.map((q) => ({
-        q: q.question,
-        topic: q.topic,
-        difficulty: q.difficulty,
-        hint: q.hint,
-      }));
+  const questions = useMemo(() => {
+    const rawList = backendQuestions.length
+      ? backendQuestions.map((q) => ({
+          id: q._id,
+          q: q.question,
+          topic: q.topic,
+          difficulty: q.difficulty,
+          hint: q.hint,
+          role: q.role,
+          companies: q.companies || [],
+          externalLink: q.externalLink || '',
+        }))
+      : [
+          ...(mockQuestions[selectedRole] || []),
+          ...(mockQuestions.dsa || []),
+          ...(mockQuestions.hr || []),
+          ...(mockQuestions.aptitude || []),
+        ];
+
+    if (selectedRound === 'aptitude') {
+      return rawList.filter(q => q.topic?.toLowerCase() === 'aptitude' || q.role?.toLowerCase() === 'aptitude');
     }
-    return selectedRound === 'hr' ? mockQuestions.hr : mockQuestions.mern;
-  })();
+    if (selectedRound === 'hr') {
+      return rawList.filter(q => q.role?.toLowerCase() === 'hr' || /behavioral|motivation|introduction|career/i.test(q.topic));
+    }
+    if (selectedRound === 'dsa') {
+      return rawList.filter(q => q.topic?.toLowerCase() === 'dsa' || Boolean(q.externalLink));
+    }
+    if (selectedRound === 'project') {
+      return [
+        { q: 'Walk me through the architecture of your most recent project. What was the frontend and backend stack, and why did you choose it?', topic: 'Project Architecture', difficulty: 'Medium', hint: 'Cover data flow, components, database choice, and state management.' },
+        { q: 'Describe a complex technical challenge you faced while building your project and how you debugged and resolved it.', topic: 'Problem Solving', difficulty: 'Hard', hint: 'Use STAR method: explain the issue, your investigation, and your concrete resolution.' },
+        { q: 'How did you handle user authentication and database security in your project?', topic: 'Security & Auth', difficulty: 'Medium', hint: 'Mention JWT, hashing, localstorage/cookies, and access scopes.' },
+        { q: 'If you had to scale your project to support 100,000 active users, what bottlenecks would you address first?', topic: 'Scaling & Optimization', difficulty: 'Hard', hint: 'Discuss caching (Redis), indexing, load balancing, and CDN asset delivery.' },
+      ];
+    }
+
+    // Technical Round: Stack-specific core questions (React, Node, Express, MongoDB, JS, etc.)
+    const stackTechQuestions = rawList.filter(
+      q => q.topic?.toLowerCase() !== 'dsa' &&
+           !q.externalLink &&
+           q.role?.toLowerCase() !== 'hr' &&
+           q.role?.toLowerCase() !== 'aptitude' &&
+           q.topic?.toLowerCase() !== 'aptitude' &&
+           !/behavioral|motivation|introduction|career/i.test(q.topic)
+    );
+
+    return stackTechQuestions.length ? stackTechQuestions : rawList;
+  }, [backendQuestions, selectedRound, selectedRole]);
 
   useEffect(() => {
     if (started) timerRef.current = setInterval(() => setTimer((t) => t + 1), 1000);
@@ -198,9 +236,9 @@ export default function AIInterview() {
 
           <div style={{ marginBottom: 28 }}>
             <label style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: 10 }}>SELECT ROUND TYPE</label>
-            <div style={{ display: 'flex', gap: 10 }}>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               {rounds.map((round) => (
-                <button key={round.id} onClick={() => setSelectedRound(round.id)} className={`btn ${selectedRound === round.id ? 'btn-primary' : 'btn-outline'}`} style={{ flex: 1, justifyContent: 'center', padding: '14px 12px' }}>
+                <button key={round.id} onClick={() => setSelectedRound(round.id)} className={`btn ${selectedRound === round.id ? 'btn-primary' : 'btn-outline'}`} style={{ flex: '1 1 120px', justifyContent: 'center', padding: '12px 10px' }}>
                   <span>{round.icon}</span> {round.label}
                 </button>
               ))}
@@ -217,16 +255,16 @@ export default function AIInterview() {
 
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
         <div>
           <h1 style={{ fontSize: 20, fontWeight: 800 }}>AI Mock Interview</h1>
-          <div style={{ display: 'flex', gap: 10, marginTop: 6 }}>
+          <div style={{ display: 'flex', gap: 8, marginTop: 6, flexWrap: 'wrap' }}>
             <span className="badge badge-blue">{roleLabel}</span>
             <span className="badge badge-purple">{rounds.find((r) => r.id === selectedRound)?.label}</span>
             {completed && <span className="badge badge-green">Complete</span>}
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)', fontSize: 14 }}>
             <Clock size={14} /> {formatTime(timer)}
           </div>
@@ -261,7 +299,7 @@ export default function AIInterview() {
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 20, height: 'calc(100vh - 260px)' }}>
+      <div className="content-grid">
         <div className="card" style={{ display: 'flex', flexDirection: 'column', padding: 0, overflow: 'hidden' }}>
           <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{ width: 34, height: 34, borderRadius: '50%', background: 'linear-gradient(135deg, var(--blue), var(--purple))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -275,7 +313,7 @@ export default function AIInterview() {
             </div>
           </div>
 
-          <div style={{ flex: 1, overflowY: 'auto', padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ flex: 1, overflowY: 'auto', padding: 20, display: 'flex', flexDirection: 'column', gap: 16, minHeight: 280 }}>
             {messages.map((msg, i) => (
               <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', flexDirection: msg.role === 'user' ? 'row-reverse' : 'row' }}>
                 <div style={{ width: 30, height: 30, borderRadius: '50%', flexShrink: 0, background: msg.role === 'ai' ? 'linear-gradient(135deg, var(--blue), var(--purple))' : 'var(--bg-card)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

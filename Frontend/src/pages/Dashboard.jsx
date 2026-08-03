@@ -44,9 +44,9 @@ export default function Dashboard() {
 
   return (
     <div>
-      <div style={{ marginBottom: 28, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+      <div style={{ marginBottom: 28, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
         <div>
-          <h1 style={{ fontSize: 26, fontWeight: 850, marginBottom: 4 }}>{greeting}, {user?.name?.split(' ')[0] || 'there'}</h1>
+          <h1 style={{ fontSize: 24, fontWeight: 850, marginBottom: 4 }}>{greeting}, {user?.name?.split(' ')[0] || 'there'}</h1>
           <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>{today}</p>
         </div>
         <button className="btn btn-primary" onClick={() => navigate('/ai-interview')}>
@@ -141,12 +141,16 @@ export default function Dashboard() {
             { q: 'What is middleware in Express.js? Give a real-world use case.', topic: 'Node.js', diff: 'Easy', color: 'var(--green)' },
             { q: 'How does JWT authentication work? Explain the full flow.', topic: 'Auth', diff: 'Medium', color: 'var(--blue)' },
           ].map((item) => (
-            <button key={item.q} style={{ display: 'grid', gridTemplateColumns: '8px minmax(0, 1fr) auto auto 16px', alignItems: 'center', gap: 12, padding: '13px 14px', background: 'rgba(148,163,184,0.06)', borderRadius: 8, border: '1px solid var(--border)', cursor: 'pointer', color: 'var(--text)' }} onClick={() => navigate('/questions')}>
-              <span style={{ width: 7, height: 7, borderRadius: '50%', background: item.color }} />
-              <span style={{ fontSize: 14, textAlign: 'left' }}>{item.q}</span>
-              <span className="badge badge-blue">{item.topic}</span>
-              <span className={`badge ${item.diff === 'Easy' ? 'badge-green' : 'badge-blue'}`}>{item.diff}</span>
-              <ArrowRight size={14} color="var(--text-muted)" />
+            <button key={item.q} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', padding: '13px 14px', background: 'rgba(148,163,184,0.06)', borderRadius: 8, border: '1px solid var(--border)', cursor: 'pointer', color: 'var(--text)', width: '100%', boxSizing: 'border-box' }} onClick={() => navigate('/questions')}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: '1 1 200px' }}>
+                <span style={{ width: 7, height: 7, borderRadius: '50%', background: item.color, flexShrink: 0 }} />
+                <span style={{ fontSize: 14, textAlign: 'left' }}>{item.q}</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+                <span className="badge badge-blue">{item.topic}</span>
+                <span className={`badge ${item.diff === 'Easy' ? 'badge-green' : 'badge-blue'}`}>{item.diff}</span>
+                <ArrowRight size={14} color="var(--text-muted)" />
+              </div>
             </button>
           ))}
         </div>

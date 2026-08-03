@@ -28,19 +28,16 @@ export default function Auth() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'grid', gridTemplateColumns: '1fr minmax(340px, 420px)', background: 'var(--bg-base)' }}>
-      <section style={{ padding: 56, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <div style={{ maxWidth: 620 }}>
-          <div style={{ width: 44, height: 44, borderRadius: 10, background: 'var(--blue)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, marginBottom: 24 }}>P</div>
-          <h1 style={{ fontSize: 52, fontWeight: 800, lineHeight: 1.08, marginBottom: 18 }}>Build interview momentum every day.</h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: 17, lineHeight: 1.7 }}>
-            Save your progress, unlock your track, and use AI feedback when the backend is running.
-          </p>
-        </div>
-      </section>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', background: 'var(--bg-base)', padding: '24px 16px' }}>
+      <div style={{ maxWidth: 420, width: '100%', marginBottom: 24, textAlign: 'center' }}>
+        <div style={{ width: 44, height: 44, borderRadius: 10, background: 'var(--blue)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, margin: '0 auto 16px' }}>P</div>
+        <h1 style={{ fontSize: 28, fontWeight: 800, lineHeight: 1.15, marginBottom: 10 }}>PrepTrack Workspace</h1>
+        <p style={{ color: 'var(--text-secondary)', fontSize: 14, lineHeight: 1.6 }}>
+          Save your progress, unlock your track, and practice with instant AI feedback.
+        </p>
+      </div>
 
-      <section style={{ padding: 32, display: 'flex', alignItems: 'center' }}>
-        <form onSubmit={submit} className="card" style={{ width: '100%', padding: 24 }}>
+      <form onSubmit={submit} className="card" style={{ maxWidth: 420, width: '100%', padding: '24px 20px', boxSizing: 'border-box' }}>
           <div style={{ display: 'flex', gap: 8, marginBottom: 22 }}>
             <button type="button" className={`btn ${mode === 'login' ? 'btn-primary' : 'btn-outline'}`} style={{ flex: 1, justifyContent: 'center' }} onClick={() => setMode('login')}>
               <LogIn size={15} /> Login
@@ -76,6 +73,7 @@ export default function Auth() {
                 <option value="python">Python Developer</option>
                 <option value="frontend">Frontend Developer</option>
                 <option value="data">Data Analyst</option>
+                <option value="devops">DevOps Engineer</option>
               </select>
             </label>
           )}
@@ -86,7 +84,6 @@ export default function Auth() {
             {loading ? 'Please wait...' : mode === 'login' ? 'Login to PrepTrack' : 'Create account'} <ArrowRight size={15} />
           </button>
         </form>
-      </section>
     </div>
   );
 }

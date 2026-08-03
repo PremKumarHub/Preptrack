@@ -1,12 +1,22 @@
+# Dependencies
 node_modules/
+**/node_modules/
+
+# Environment variables & secrets
 .env
-.DS_Store
+.env.*
+!*.env.example
+**/.env
+**/.env.*
+
+# Build outputs
 dist/
+**/dist/
 build/
+
+# IDE / System
+.DS_Store
+Thumbs.db
 .vscode/
 .idea/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.vercel/
-.next/
+*.log

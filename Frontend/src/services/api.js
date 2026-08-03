@@ -59,6 +59,7 @@ export const api = {
   companies: () => request('/companies'),
   company: (id) => request(`/companies/${id}`),
   companyQuestions: (id, role) => request(`/companies/${id}/questions${role ? `?role=${encodeURIComponent(role)}` : ''}`),
+  updateRole: (role) => request('/auth/role', { method: 'PUT', body: JSON.stringify({ role }) }),
 };
 
 export const roleLabels = {
@@ -67,5 +68,6 @@ export const roleLabels = {
   python: 'Python Developer',
   frontend: 'Frontend Developer',
   data: 'Data Analyst',
+  devops: 'DevOps Engineer',
   hr: 'HR Round',
 };

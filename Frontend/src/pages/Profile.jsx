@@ -8,6 +8,26 @@ export default function Profile() {
   const navigate = useNavigate();
   const [progress, setProgress] = useState(null);
   const [sessions, setSessions] = useState([]);
+  const [activeRole, setActiveRole] = useState(user?.role || 'mern');
+  const [updatingRole, setUpdatingRole] = useState(false);
+  const [roleStatus, setRoleStatus] = useState('');
+
+  const changeRole = async (newRole) => {
+    setUpdatingRole(true);
+    setRoleStatus('');
+    try {
+      const res = await api.updateRole(newRole);
+      const updatedUser = { ...user, role: res.user.role };
+      localStorage.setItem('preptrack_user', JSON.stringify(updatedUser));
+      setActiveRole(res.user.role);
+      setRoleStatus('Track successfully updated! Reloading...');
+      setTimeout(() => window.location.reload(), 1000);
+    } catch (err) {
+      setRoleStatus(`Error: ${err.message}`);
+    } finally {
+      setUpdatingRole(false);
+    }
+  };
 
   useEffect(() => {
     Promise.all([
@@ -29,8 +49,8 @@ export default function Profile() {
         <p style={{ color: 'var(--text-secondary)' }}>Your progress overview and interview history.</p>
       </div>
 
-      <div className="card" style={{ maxWidth: 560, display: 'flex', alignItems: 'center', gap: 20, marginBottom: 24 }}>
-        <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'linear-gradient(135deg, var(--blue), var(--purple))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, fontWeight: 800, color: 'white' }}>{initials}</div>
+      <div className="card" style={{ maxWidth: 560, display: 'flex', alignItems: 'center', gap: 20, marginBottom: 20, flexWrap: 'wrap' }}>
+        <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'linear-gradient(135deg, var(--blue), var(--purple))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, fontWeight: 800, color: 'white', flexShrink: 0 }}>{initials}</div>
         <div>
           <div style={{ fontWeight: 800, fontSize: 20 }}>{user?.name || 'User'}</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text-muted)', fontSize: 14, marginTop: 4 }}>
@@ -43,7 +63,28 @@ export default function Profile() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, maxWidth: 560, marginBottom: 28 }}>
+      <div className="card" style={{ maxWidth: 560, marginBottom: 24 }}>
+        <h3 style={{ fontWeight: 800, fontSize: 15, marginBottom: 12 }}>Change Active Track</h3>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          <select
+            className="field-input"
+            value={activeRole}
+            onChange={(e) => changeRole(e.target.value)}
+            style={{ flex: 1, padding: '10px 14px', margin: 0, background: 'var(--bg-base)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', outline: 'none' }}
+            disabled={updatingRole}
+          >
+            <option value="mern">MERN Stack</option>
+            <option value="java">Java Developer</option>
+            <option value="python">Python Developer</option>
+            <option value="frontend">Frontend Developer</option>
+            <option value="data">Data Analyst</option>
+            <option value="devops">DevOps Engineer</option>
+          </select>
+        </div>
+        {roleStatus && <div style={{ fontSize: 13, color: 'var(--blue)', marginTop: 8, fontWeight: 500 }}>{roleStatus}</div>}
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 12, maxWidth: 560, marginBottom: 28 }}>
         {[
           { label: 'Questions Done', value: progress?.doneCount ?? '—' },
           { label: 'Mock Interviews', value: progress?.sessionCount ?? sessions.length ?? '—' },

@@ -8,8 +8,8 @@ const questionSchema = new mongoose.Schema(
     difficulty: { type: String, enum: ['Easy', 'Medium', 'Hard'], required: true },
     hint: { type: String, default: '' },
     answer: { type: String, default: '' },
-    practiceUrl: { type: String, default: '' },
     companies: { type: [String], default: [], lowercase: true, trim: true },
+    externalLink: { type: String, default: '' },
   },
   { timestamps: true }
 );

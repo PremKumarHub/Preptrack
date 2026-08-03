@@ -46,3 +46,22 @@ export async function login(req, res, next) {
 export function me(req, res) {
   res.json({ user: toPublicUser(req.user) });
 }
+
+export async function updateRole(req, res, next) {
+  try {
+    const { role } = req.body;
+    if (!role) {
+      return res.status(400).json({ message: 'Role is required' });
+    }
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    user.role = role.toLowerCase();
+    await user.save();
+    res.json({ user: toPublicUser(user) });
+  } catch (error) {
+    next(error);
+  }
+}
+

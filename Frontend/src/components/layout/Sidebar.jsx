@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { LayoutDashboard, BookOpen, MessageSquare, Building2, User, Zap, Sun, Moon, LogOut } from 'lucide-react';
+import { LayoutDashboard, BookOpen, MessageSquare, Building2, User, Zap, Sun, Moon, LogOut, X } from 'lucide-react';
 import { clearSession, getStoredUser } from '../../services/api';
 
 const navItems = [
@@ -12,7 +12,7 @@ const navItems = [
   { to: '/profile', icon: User, label: 'Profile' },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, onClose }) {
   const navigate = useNavigate();
   const user = getStoredUser();
   const [theme, setTheme] = useState(() => {
@@ -34,11 +34,15 @@ export default function Sidebar() {
       // Local storage can be unavailable in restricted browser modes.
     }
     setTheme(next);
-  }
+  };
+
+  const handleNavClick = () => {
+    if (onClose) onClose();
+  };
 
   return (
-    <aside className="sidebar-shell">
-      <div style={{ padding: '24px 20px', borderBottom: '1px solid var(--border)' }}>
+    <aside className={`sidebar-shell ${isOpen ? 'sidebar-open' : ''}`}>
+      <div style={{ padding: '20px 20px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{
             width: 38, height: 38, background: 'linear-gradient(135deg, var(--blue), var(--cyan))', borderRadius: 10,
@@ -50,11 +54,25 @@ export default function Sidebar() {
             <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>IT Interview Prep</div>
           </div>
         </div>
+        {onClose && (
+          <button 
+            className="mobile-close-btn" 
+            onClick={onClose}
+            aria-label="Close Menu"
+          >
+            <X size={20} />
+          </button>
+        )}
       </div>
 
       <nav style={{ flex: 1, padding: '12px 12px' }}>
         {navItems.map(({ to, icon: Icon, label }) => (
-          <NavLink key={to} to={to} className={({ isActive }) => `nav-link ${isActive ? 'nav-link-active' : ''}`}>
+          <NavLink 
+            key={to} 
+            to={to} 
+            onClick={handleNavClick}
+            className={({ isActive }) => `nav-link ${isActive ? 'nav-link-active' : ''}`}
+          >
             <Icon size={17} />
             {label}
           </NavLink>
@@ -77,7 +95,7 @@ export default function Sidebar() {
             className="btn btn-ghost"
             title="Logout"
             aria-label="Logout"
-            onClick={() => { clearSession(); navigate('/auth'); }}
+            onClick={() => { if (onClose) onClose(); clearSession(); navigate('/auth'); }}
             style={{ padding: '8px 10px' }}
           >
             <LogOut size={14} />
@@ -86,11 +104,14 @@ export default function Sidebar() {
       </div>
 
       <div style={{ padding: '16px 12px', borderTop: '1px solid var(--border)' }}>
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px',
-          borderRadius: 8, cursor: 'pointer', background: 'var(--bg-card)',
-          border: '1px solid var(--border)',
-        }}>
+        <div 
+          onClick={() => { if (onClose) onClose(); navigate('/profile'); }}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px',
+            borderRadius: 8, cursor: 'pointer', background: 'var(--bg-card)',
+            border: '1px solid var(--border)',
+          }}
+        >
           <div style={{
             width: 34, height: 34, borderRadius: '50%', background: 'linear-gradient(135deg, var(--blue), var(--cyan))',
             display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, flexShrink: 0,
@@ -104,3 +125,4 @@ export default function Sidebar() {
     </aside>
   );
 }
+

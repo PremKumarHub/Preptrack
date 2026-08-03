@@ -11,7 +11,7 @@ export default function CompanyPrep() {
         <h1 style={{ fontSize: 26, fontWeight: 800, marginBottom: 6 }}>Company Prep</h1>
         <p style={{ color: 'var(--text-secondary)' }}>Targeted prep for top Indian IT companies. Know the pattern, crack the round.</p>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
         {companies.map((c) => (
           <div
             key={c.id}
